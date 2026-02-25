@@ -1,0 +1,193 @@
+{
+  "categories": [
+    { "id": "market-data", "name": "Market Data", "icon": "📈" },
+    { "id": "research", "name": "Research", "icon": "🔬" },
+    { "id": "crm", "name": "CRM & Deals", "icon": "🤝" },
+    { "id": "compliance", "name": "Compliance", "icon": "⚖️" },
+    { "id": "news", "name": "News", "icon": "📰" },
+    { "id": "internal", "name": "Internal", "icon": "🏦" },
+    { "id": "tools", "name": "Tools", "icon": "🛠️" }
+  ],
+  "links": [
+    {
+      "id": "link-001",
+      "title": "Bloomberg Terminal",
+      "url": "https://bba.bloomberg.net",
+      "category": "market-data",
+      "tags": ["bloomberg", "markets", "terminal", "data"],
+      "description": "Bloomberg professional terminal — equities, fixed income, FX, commodities",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-002",
+      "title": "Refinitiv Eikon",
+      "url": "https://eikon.refinitiv.com",
+      "category": "market-data",
+      "tags": ["refinitiv", "eikon", "markets", "data"],
+      "description": "Refinitiv Eikon financial analysis platform",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-003",
+      "title": "FactSet",
+      "url": "https://www.factset.com",
+      "category": "market-data",
+      "tags": ["factset", "data", "analytics"],
+      "description": "FactSet financial data and analytics",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-004",
+      "title": "S&P Capital IQ",
+      "url": "https://www.capitaliq.spglobal.com",
+      "category": "market-data",
+      "tags": ["capitaliq", "sp", "data", "comps"],
+      "description": "S&P Capital IQ — comps, precedent transactions, company data",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-005",
+      "title": "PitchBook",
+      "url": "https://pitchbook.com",
+      "category": "market-data",
+      "tags": ["pitchbook", "pe", "vc", "deals"],
+      "description": "Private market data — PE, VC, M&A",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-006",
+      "title": "Mergermarket",
+      "url": "https://www.mergermarket.com",
+      "category": "research",
+      "tags": ["ma", "mergers", "deals", "intelligence"],
+      "description": "M&A intelligence and deal origination",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-007",
+      "title": "Dealogic",
+      "url": "https://dealogic.com",
+      "category": "research",
+      "tags": ["dealogic", "league tables", "ecm", "dcm"],
+      "description": "Investment banking league tables and deal analytics",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-008",
+      "title": "SEC EDGAR",
+      "url": "https://www.sec.gov/cgi-bin/browse-edgar",
+      "category": "research",
+      "tags": ["sec", "filings", "10k", "10q", "edgar"],
+      "description": "SEC filings — 10-K, 10-Q, S-1, proxy statements",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-009",
+      "title": "WSJ Markets",
+      "url": "https://www.wsj.com/market-data",
+      "category": "news",
+      "tags": ["wsj", "news", "markets"],
+      "description": "Wall Street Journal market data and news",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-010",
+      "title": "Financial Times",
+      "url": "https://www.ft.com",
+      "category": "news",
+      "tags": ["ft", "news", "finance"],
+      "description": "Financial Times — global financial news",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-011",
+      "title": "Reuters Finance",
+      "url": "https://www.reuters.com/finance",
+      "category": "news",
+      "tags": ["reuters", "news", "finance"],
+      "description": "Reuters financial news and markets",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-012",
+      "title": "Salesforce CRM",
+      "url": "https://login.salesforce.com",
+      "category": "crm",
+      "tags": ["salesforce", "crm", "pipeline"],
+      "description": "Salesforce — deal pipeline and client management",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-013",
+      "title": "DealCloud",
+      "url": "https://www.dealcloud.com",
+      "category": "crm",
+      "tags": ["dealcloud", "crm", "pipeline", "banking"],
+      "description": "DealCloud — investment banking CRM and deal management",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-014",
+      "title": "Intralinks VDR",
+      "url": "https://www.intralinks.com",
+      "category": "crm",
+      "tags": ["vdr", "dataroom", "due diligence"],
+      "description": "Virtual data room for M&A due diligence",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-015",
+      "title": "Ansarada Data Room",
+      "url": "https://www.ansarada.com",
+      "category": "crm",
+      "tags": ["vdr", "dataroom", "due diligence"],
+      "description": "AI-powered data room for deal management",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-016",
+      "title": "FINRA BrokerCheck",
+      "url": "https://brokercheck.finra.org",
+      "category": "compliance",
+      "tags": ["finra", "compliance", "broker", "check"],
+      "description": "FINRA BrokerCheck — verify broker registrations",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-017",
+      "title": "EDGAR Full-Text Search",
+      "url": "https://efts.sec.gov/LATEST/search-index?q=%22&dateRange=custom",
+      "category": "compliance",
+      "tags": ["sec", "edgar", "search", "filings"],
+      "description": "Full-text search across all SEC filings",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-018",
+      "title": "Morningstar Direct",
+      "url": "https://direct.morningstar.com",
+      "category": "research",
+      "tags": ["morningstar", "funds", "equity", "research"],
+      "description": "Morningstar investment research platform",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-019",
+      "title": "Excel Online",
+      "url": "https://office.com/launch/excel",
+      "category": "tools",
+      "tags": ["excel", "office", "spreadsheet"],
+      "description": "Microsoft Excel Online",
+      "addedBy": "Admin"
+    },
+    {
+      "id": "link-020",
+      "title": "DocuSign",
+      "url": "https://www.docusign.com",
+      "category": "tools",
+      "tags": ["docusign", "esignature", "contracts"],
+      "description": "Electronic signatures for deal documents",
+      "addedBy": "Admin"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anchor — Banking Link Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ── Header ── -->
+  <header id="header">
+    <div class="logo">
+      <div class="logo-icon">⚓</div>
+      Anchor
+    </div>
+
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input id="search-input" type="text" placeholder="Search links, tags, categories…" autocomplete="off" spellcheck="false" />
+      <span class="search-kbd">⌘K</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-ghost" id="btn-export">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Import / Export
+      </button>
+      <button class="btn btn-primary" id="btn-add-link">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Link
+      </button>
+      <button id="user-btn">
+        <div class="user-avatar">?</div>
+        <span class="user-name">Select User</span>
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Body ── -->
+  <div id="body">
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <!-- rendered by JS -->
+    </nav>
+
+    <!-- Main -->
+    <main id="main">
+
+      <!-- Favorites Section -->
+      <section id="favs-section" style="display:none">
+        <div class="section-header">
+          <div class="section-title">⭐ Pinned Favorites</div>
+        </div>
+        <div class="favs-wrap" id="favs-wrap"></div>
+      </section>
+
+      <!-- Links Section -->
+      <section id="links-section">
+        <div class="section-header">
+          <div class="section-title" id="section-label">🗂️ All Links</div>
+          <div class="sort-row">
+            <label for="sort-select">Sort by</label>
+            <select class="sort-select" id="sort-select">
+              <option value="frequency">Most Used</option>
+              <option value="alpha">A → Z</option>
+              <option value="recent">Recently Added</option>
+            </select>
+          </div>
+        </div>
+        <div class="links-grid" id="links-grid"></div>
+        <div id="no-results" class="empty-state" style="display:none">
+          <div class="empty-icon">🔍</div>
+          <h3>No links found</h3>
+          <p>Try a different search term, or add a new link.</p>
+          <button class="btn btn-primary" id="btn-add-from-empty">+ Add Link</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL: Add Link
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add New Link</span>
+      <button class="modal-close">×</button>
+    </div>
+    <form id="add-form">
+      <div class="modal-body">
+        <div class="form-row">
+          <label for="add-url">URL *</label>
+          <input id="add-url" class="form-input" type="url" placeholder="https://bloomberg.com" required />
+        </div>
+        <div class="form-row">
+          <label for="add-title">Title *</label>
+          <input id="add-title" class="form-input" type="text" placeholder="Bloomberg Terminal" required />
+        </div>
+        <div class="form-2col">
+          <div class="form-row">
+            <label for="add-category">Category</label>
+            <select id="add-category" class="form-select"></select>
+          </div>
+          <div class="form-row">
+            <label for="add-tags">Tags</label>
+            <input id="add-tags" class="form-input" type="text" placeholder="bloomberg, markets" />
+            <span class="form-hint">Comma-separated</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="add-desc">Description</label>
+          <textarea id="add-desc" class="form-textarea" placeholder="What is this link for?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline modal-close">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Link</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL: User Picker
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-user">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Who are you?</span>
+      <button class="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-muted)">Select your name to track your favorites and most-used links.</p>
+      <div class="user-grid" id="user-grid">
+        <!-- rendered by JS -->
+      </div>
+      <div class="new-user-row" id="new-user-wrap" style="display:none">
+        <input id="new-user-input" class="form-input" type="text" placeholder="Your full name" maxlength="40" />
+        <button class="btn btn-primary" id="btn-create-user">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODAL: Import / Export
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-export">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">Import / Export Links</span>
+      <button class="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Export -->
+      <div>
+        <div class="section-title" style="margin-bottom:8px">📤 Export</div>
+        <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:10px">Copy this JSON and share with teammates to sync your link library.</p>
+        <div class="export-area" id="export-area"></div>
+        <button class="btn btn-outline btn-sm" id="btn-copy-export" style="margin-top:8px">📋 Copy to Clipboard</button>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border)"/>
+
+      <!-- Import -->
+      <div>
+        <div class="section-title" style="margin-bottom:8px">📥 Import</div>
+        <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:10px">Paste exported JSON below. Duplicate URLs will be skipped.</p>
+        <textarea id="import-input" class="form-textarea" style="min-height:100px;font-family:monospace;font-size:12px" placeholder='{"categories":[…],"links":[…]}'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline modal-close">Cancel</button>
+      <button class="btn btn-primary" id="btn-import-confirm">Import Links</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="app.js"></script>
+<script>
+  // Wire up "Add Link" from empty state
+  document.getElementById('btn-add-from-empty')?.addEventListener('click', () => {
+    document.getElementById('btn-add-link').click();
+  });
+</script>
+
+</body>
+</html>
