@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YT Batch Upload</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- Auth overlay (shown until token is acquired) -->
+  <div class="auth-overlay" id="auth-overlay">
+    <svg width="40" height="40" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M64 28L64 76" stroke="#C9A84C" stroke-width="7" stroke-linecap="round"/>
+      <path d="M42 50L64 28L86 50" stroke="#C9A84C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M32 92L96 92" stroke="#C9A84C" stroke-width="7" stroke-linecap="round"/>
+    </svg>
+    <p>Sign in with your Google account to upload videos to YouTube.</p>
+    <button class="btn-auth" id="btn-auth">Sign in with Google</button>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <svg width="18" height="18" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M64 20L64 80" stroke="#C9A84C" stroke-width="10" stroke-linecap="round"/>
+        <path d="M36 48L64 20L92 48" stroke="#C9A84C" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M24 100L104 100" stroke="#C9A84C" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+      YT Batch Upload
+    </div>
+    <div class="auth-status">
+      <div class="auth-dot" id="auth-dot"></div>
+      <span id="auth-label">Not signed in</span>
+    </div>
+  </header>
+
+  <!-- Drop zone -->
+  <div class="drop-zone" id="drop-zone">
+    <svg class="drop-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3v12M8 7l4-4 4 4" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M4 17v1a2 2 0 002 2h12a2 2 0 002-2v-1" stroke="#7A8494" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <div class="drop-label">
+      Drop video files here or <span id="browse-link">browse</span>
+    </div>
+    <input type="file" id="file-input" multiple accept="video/*" />
+  </div>
+
+  <!-- Queue list -->
+  <div class="queue-wrapper" id="queue-wrapper">
+    <div class="queue-empty" id="queue-empty">No files added yet.</div>
+    <!-- Queue rows injected by JS -->
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-count">
+      <span id="count-done">0</span> / <span id="count-total">0</span> uploaded
+    </div>
+    <button class="btn-upload" id="btn-upload" disabled>Upload All</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

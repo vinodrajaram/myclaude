@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "YT Batch Upload",
+  "version": "1.0.0",
+  "description": "Batch upload multiple local video files to YouTube with per-video privacy settings.",
+  "permissions": ["identity"],
+  "host_permissions": ["https://www.googleapis.com/*"],
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/youtube.upload"]
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}

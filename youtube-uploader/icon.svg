@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Background -->
+  <rect width="128" height="128" rx="20" fill="#07080A"/>
+  <!-- Upload arrow -->
+  <path d="M64 28 L64 76" stroke="#C9A84C" stroke-width="7" stroke-linecap="round"/>
+  <path d="M42 50 L64 28 L86 50" stroke="#C9A84C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Base line -->
+  <path d="M32 92 L96 92" stroke="#C9A84C" stroke-width="7" stroke-linecap="round"/>
+  <!-- Small YouTube-style triangle hint -->
+  <circle cx="64" cy="64" r="58" fill="none" stroke="#C9A84C" stroke-width="3" stroke-opacity="0.2"/>
+</svg>
