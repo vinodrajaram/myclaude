@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meridian — AI CRM for Investment Banking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #08090A;
+      --surface: #101114;
+      --surface-2: #181A1E;
+      --gold: #C9A84C;
+      --gold-bright: #E4C46A;
+      --green: #2A5C3F;
+      --green-bright: #3D7A57;
+      --text: #E2DDD6;
+      --text-muted: #7A7570;
+      --text-dim: #2E2C2A;
+      --border: #1A1C20;
+      --border-bright: #262930;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Ticker ── */
+    .ticker-wrap {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      padding: 9px 0;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 80px;
+      animation: ticker 40s linear infinite;
+      white-space: nowrap;
+      width: max-content;
+    }
+
+    .ticker-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .ticker-item .tag { color: var(--gold); margin-right: 10px; }
+    .ticker-item .up { color: #5BAF7A; }
+    .ticker-item .down { color: #C45C5C; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 52px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(8, 9, 10, 0.94);
+      backdrop-filter: blur(16px);
+      z-index: 200;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo .dot { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 44px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: #08090A;
+      padding: 10px 22px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--gold-bright); }
+
+    /* ── Hero ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      min-height: 90vh;
+    }
+
+    .hero-left {
+      padding: 88px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(60px, 5.5vw, 92px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 36px;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-body {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 460px;
+      line-height: 1.8;
+      margin-bottom: 52px;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      animation: fadeUp 0.7s ease 0.3s both;
+    }
+
+    .btn-primary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: #08090A;
+      padding: 15px 30px;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-block;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-bright);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-bright);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+
+    /* Dashboard mockup */
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .dashboard {
+      position: absolute;
+      inset: 36px 36px 36px 48px;
+      border: 1px solid var(--border-bright);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+
+    .dash-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dash-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .dash-live {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: #5BAF7A;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dash-live::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #5BAF7A;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .deal-list { padding: 0; }
+
+    .deal-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      border-left: 2px solid transparent;
+      transition: background 0.2s;
+    }
+
+    .deal-row:hover { background: var(--surface); }
+    .deal-row.gold { border-left-color: var(--gold); }
+    .deal-row.green { border-left-color: #5BAF7A; }
+    .deal-row.blue { border-left-color: #6B9FD4; }
+
+    .deal-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .deal-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .deal-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .deal-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+    }
+
+    .deal-tag.closing { background: rgba(107, 159, 212, 0.15); color: #6B9FD4; }
+    .deal-tag.diligence { background: rgba(91, 175, 122, 0.12); color: #5BAF7A; }
+    .deal-tag.pitching { background: rgba(201, 168, 76, 0.12); color: var(--gold); }
+
+    .ai-block {
+      margin: 16px;
+      padding: 14px 16px;
+      background: rgba(201, 168, 76, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.18);
+    }
+
+    .ai-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .ai-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── Stats ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat {
+      padding: 52px 52px;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 68px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .stat-num em { color: var(--gold); font-style: normal; }
+
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── Section header ── */
+    .section-head {
+      padding: 80px 52px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sec-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 3.5vw, 58px);
+      font-weight: 300;
+      line-height: 1.08;
+    }
+
+    .sec-title em { font-style: italic; color: var(--gold); }
+
+    .sec-desc {
+      max-width: 300px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ── Features ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .feat {
+      padding: 52px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.25s;
+      position: relative;
+    }
+
+    .feat:hover { background: var(--surface); }
+    .feat:nth-child(3n) { border-right: none; }
+
+    .feat-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 36px;
+    }
+
+    .feat-glyph {
+      font-size: 26px;
+      margin-bottom: 20px;
+      display: block;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .feat:hover .feat-glyph { color: var(--gold); }
+
+    .feat-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    .feat-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ── Testimonials ── */
+    .testimonials {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .testi {
+      padding: 64px 52px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .testi:nth-child(2n) { border-right: none; }
+
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 36px;
+      padding-top: 20px;
+      position: relative;
+    }
+
+    .testi-quote::before {
+      content: '\201C';
+      position: absolute;
+      top: -30px;
+      left: -6px;
+      font-size: 96px;
+      line-height: 1;
+      color: var(--text-dim);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: normal;
+    }
+
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .author-init {
+      width: 42px;
+      height: 42px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .author-role {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      padding: 112px 52px;
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: -300px;
+      right: -300px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.04) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 4vw, 68px);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .cta-title em { font-style: italic; color: var(--gold); }
+
+    .cta-body {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 460px;
+    }
+
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .field input {
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      color: var(--text);
+      padding: 13px 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .field input:focus { border-color: var(--gold); }
+    .field input::placeholder { color: #3A3834; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    .submit {
+      background: var(--gold);
+      color: #08090A;
+      border: none;
+      padding: 16px 36px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      align-self: flex-start;
+    }
+
+    .submit:hover {
+      background: var(--gold-bright);
+      transform: translateY(-2px);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 44px 52px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .foot-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .foot-brand .dot { color: var(--gold); }
+
+    .foot-copy {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      margin-top: 8px;
+    }
+
+    .foot-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .foot-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .foot-links a:hover { color: var(--text); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stats-row .stat { animation: fadeUp 0.6s ease both; }
+    .stats-row .stat:nth-child(1) { animation-delay: 0.05s; }
+    .stats-row .stat:nth-child(2) { animation-delay: 0.1s; }
+    .stats-row .stat:nth-child(3) { animation-delay: 0.15s; }
+    .stats-row .stat:nth-child(4) { animation-delay: 0.2s; }
+  </style>
+</head>
+<body>
+
+  <!-- Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="ticker-item"><span class="tag">PIPELINE</span>$2.4B Active Mandates · 18 Live Deals</span>
+      <span class="ticker-item"><span class="tag">AI BRIEF</span>Meridian prepared 3 meeting briefs this morning</span>
+      <span class="ticker-item"><span class="tag">CLOSED</span>Thornfield Industrials — <span class="up">$380M LBO ↑</span></span>
+      <span class="ticker-item"><span class="tag">ALERT</span>Q4 earnings call: Vantage Capital in 2h</span>
+      <span class="ticker-item"><span class="tag">RELATIONSHIP</span>3 warm intros available for Meridian Healthcare</span>
+      <span class="ticker-item"><span class="tag">MANDATE</span>New sell-side: Blackridge Infrastructure — <span class="up">$650M</span></span>
+      <span class="ticker-item"><span class="tag">PIPELINE</span>$2.4B Active Mandates · 18 Live Deals</span>
+      <span class="ticker-item"><span class="tag">AI BRIEF</span>Meridian prepared 3 meeting briefs this morning</span>
+      <span class="ticker-item"><span class="tag">CLOSED</span>Thornfield Industrials — <span class="up">$380M LBO ↑</span></span>
+      <span class="ticker-item"><span class="tag">ALERT</span>Q4 earnings call: Vantage Capital in 2h</span>
+      <span class="ticker-item"><span class="tag">RELATIONSHIP</span>3 warm intros available for Meridian Healthcare</span>
+      <span class="ticker-item"><span class="tag">MANDATE</span>New sell-side: Blackridge Infrastructure — <span class="up">$650M</span></span>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="logo">Meri<span class="dot">·</span>dian</a>
+    <ul class="nav-links">
+      <li><a href="#">Platform</a></li>
+      <li><a href="#">Intelligence</a></li>
+      <li><a href="#">Security</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Request Access</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">AI-First CRM · Investment Banking</div>
+      <h1 class="hero-title">
+        The intelligence<br>
+        layer your<br>
+        <em>deals deserve.</em>
+      </h1>
+      <p class="hero-body">
+        Meridian gives investment bankers a command center for relationships, pipeline, and deal intelligence — powered by AI that understands the language of capital markets.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Request Early Access</a>
+        <a href="#" class="btn-ghost">See the Platform →</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="dashboard">
+        <div class="dash-topbar">
+          <span class="dash-title">Deal Pipeline — Q1 2026</span>
+          <span class="dash-live">Live</span>
+        </div>
+        <div class="deal-list">
+          <div class="deal-row blue">
+            <div>
+              <div class="deal-name">Thornfield Industrials</div>
+              <div class="deal-sub">LBO · Goldman Sachs PE · 14 days active</div>
+            </div>
+            <div class="deal-val">$380M</div>
+            <span class="deal-tag closing">Closing</span>
+          </div>
+          <div class="deal-row green">
+            <div>
+              <div class="deal-name">Vantage Capital Systems</div>
+              <div class="deal-sub">M&A Advisory · Strategic · 31 days active</div>
+            </div>
+            <div class="deal-val">$1.2B</div>
+            <span class="deal-tag diligence">Diligence</span>
+          </div>
+          <div class="deal-row gold">
+            <div>
+              <div class="deal-name">Meridian Healthcare Group</div>
+              <div class="deal-sub">Sell-side · PE Sponsor · 8 days active</div>
+            </div>
+            <div class="deal-val">$820M</div>
+            <span class="deal-tag pitching">Pitching</span>
+          </div>
+        </div>
+        <div class="ai-block">
+          <div class="ai-label">✦ AI Relationship Insight</div>
+          <div class="ai-text">James Chen at Blackstone shares 3 connections with Meridian Healthcare's CFO. Recommend a warm introduction before Thursday's management presentation to strengthen positioning.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">$<em>4.2</em>T</div>
+      <div class="stat-label">Deals tracked on platform</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><em>340</em>+</div>
+      <div class="stat-label">Bulge bracket bankers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><em>62</em>%</div>
+      <div class="stat-label">Less time on admin</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><em>4.8</em>×</div>
+      <div class="stat-label">Faster meeting prep</div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section>
+    <div class="section-head">
+      <div>
+        <div class="sec-eyebrow">The Platform</div>
+        <h2 class="sec-title">Built for the way<br><em>deals actually move.</em></h2>
+      </div>
+      <p class="sec-desc">Meridian is designed around the reality of investment banking — not a generic CRM wearing a finance costume.</p>
+    </div>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-num">01</div>
+        <span class="feat-glyph">◈</span>
+        <div class="feat-title">Relationship Intelligence</div>
+        <p class="feat-desc">Map every connection across your firm. Surface warm paths to counterparties. Know who knows who before every pitch, meeting, or mandate.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">02</div>
+        <span class="feat-glyph">◉</span>
+        <div class="feat-title">AI Deal Briefs</div>
+        <p class="feat-desc">Walk into every meeting fully prepared. Meridian synthesizes news, filings, relationship history, and deal context into a sharp brief — minutes before your call.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">03</div>
+        <span class="feat-glyph">◎</span>
+        <div class="feat-title">Pipeline Command</div>
+        <p class="feat-desc">A deal pipeline that speaks your language: mandates, pitches, retainers, live deals. Stage, counterparty, fees, and next steps in one commanding view.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">04</div>
+        <span class="feat-glyph">⬡</span>
+        <div class="feat-title">Interaction Capture</div>
+        <p class="feat-desc">Calls, emails, meetings — automatically logged and summarized. The full relationship history, surfaced instantly when you need it.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">05</div>
+        <span class="feat-glyph">△</span>
+        <div class="feat-title">Coverage Intelligence</div>
+        <p class="feat-desc">Know who owns what relationship across your team. Eliminate coverage conflicts. Coordinate seamlessly on shared counterparties and mandates.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">06</div>
+        <span class="feat-glyph">◇</span>
+        <div class="feat-title">Secure by Design</div>
+        <p class="feat-desc">Bank-grade encryption, SOC 2 Type II, strict data isolation. Your deal intelligence never trains our models. Your data stays yours, full stop.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section style="border-top: 1px solid var(--border);">
+    <div class="section-head">
+      <div>
+        <div class="sec-eyebrow">In the Field</div>
+        <h2 class="sec-title">What bankers<br>are <em>actually saying.</em></h2>
+      </div>
+    </div>
+    <div class="testimonials">
+      <div class="testi">
+        <p class="testi-quote">Meridian found a second-degree connection to the target CFO that we would have missed entirely. That warm introduction changed the entire dynamic of the mandate.</p>
+        <div class="testi-author">
+          <div class="author-init">RK</div>
+          <div>
+            <div class="author-name">Robert Kessler</div>
+            <div class="author-role">Managing Director, M&A — Lazard</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi">
+        <p class="testi-quote">I used to spend 45 minutes preparing for every management presentation. Now I read a Meridian brief in the car. The quality is better than what I was writing myself.</p>
+        <div class="testi-author">
+          <div class="author-init">SL</div>
+          <div>
+            <div class="author-name">Sophia Lin</div>
+            <div class="author-role">VP, Technology M&A — Goldman Sachs</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi">
+        <p class="testi-quote">Our pipeline visibility went from scattered spreadsheets to a live command center. Senior bankers actually use it — which tells you everything.</p>
+        <div class="testi-author">
+          <div class="author-init">MT</div>
+          <div>
+            <div class="author-name">Marcus Torres</div>
+            <div class="author-role">COO, Investment Banking — Jefferies</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi">
+        <p class="testi-quote">We closed two mandates in Q3 that came directly from relationship paths Meridian surfaced. It's the closest thing to an unfair advantage I've seen in this business.</p>
+        <div class="testi-author">
+          <div class="author-init">AN</div>
+          <div>
+            <div class="author-name">Anita Nair</div>
+            <div class="author-role">Partner, Healthcare Banking — Evercore</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div>
+      <h2 class="cta-title">
+        Ready to give<br>
+        your deals<br>
+        an <em>edge?</em>
+      </h2>
+      <p class="cta-body">
+        Meridian is currently in private access with select investment banks. Request early access and we'll be in touch within 48 hours.
+      </p>
+    </div>
+    <form class="cta-form" onsubmit="return false;">
+      <div class="row-2">
+        <div class="field">
+          <label>First Name</label>
+          <input type="text" placeholder="James">
+        </div>
+        <div class="field">
+          <label>Last Name</label>
+          <input type="text" placeholder="Chen">
+        </div>
+      </div>
+      <div class="field">
+        <label>Work Email</label>
+        <input type="email" placeholder="j.chen@goldmansachs.com">
+      </div>
+      <div class="field">
+        <label>Firm & Title</label>
+        <input type="text" placeholder="VP, M&A Advisory — Goldman Sachs">
+      </div>
+      <button type="submit" class="submit">Request Access →</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <div class="foot-brand">Meri<span class="dot">·</span>dian</div>
+      <div class="foot-copy">© 2026 Meridian Intelligence, Inc. — Built for those who close.</div>
+    </div>
+    <ul class="foot-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Security</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
