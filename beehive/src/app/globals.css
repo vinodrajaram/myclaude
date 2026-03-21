@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* ─── Beehive Design System ─────────────────────────────────── */
+
+/* Dark mode (default) */
+:root,
+.dark {
+  --bg:           #0F0F0F;
+  --surface:      #1A1A1A;
+  --surface-high: #242424;
+  --border:       #2E2E2E;
+  --text-1:       #F0EEE8;
+  --text-2:       #8A8A8A;
+  --text-3:       #787878;
+  --accent:       #C9932A;
+  --accent-dim:   rgba(201,147,42,0.13);
+  --destructive:  #E05252;
+  --success:      #52A87A;
+}
+
+.light {
+  --bg:           #F7F5F1;
+  --surface:      #FFFFFF;
+  --surface-high: #FAFAF8;
+  --border:       #E4E2DC;
+  --text-1:       #111110;
+  --text-2:       #6B6966;
+  --text-3:       #A8A49E;
+  --accent:       #A67C1E;
+  --accent-dim:   rgba(166,124,30,0.09);
+  --destructive:  #C0392B;
+  --success:      #2E7D52;
+}
+
+/* ─── Tailwind token bridge ──────────────────────────────────── */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Colors */
+  --color-bg:         var(--bg);
+  --color-surface:    var(--surface);
+  --color-surface-hi: var(--surface-high);
+  --color-border:     var(--border);
+  --color-t1:         var(--text-1);
+  --color-t2:         var(--text-2);
+  --color-t3:         var(--text-3);
+  --color-accent:     var(--accent);
+  --color-amber-dim:  var(--accent-dim);
+  --color-danger:     var(--destructive);
+  --color-ok:         var(--success);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+/* ─── Interactive transitions ────────────────────────────────── */
+button, a, [role="button"] {
+  transition: background 120ms ease-out, border-color 120ms ease-out,
+              color 120ms ease-out, opacity 120ms ease-out;
+}
+
+/* ─── Skeleton shimmer ───────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: calc(400px + 100%) 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-high) 0%,
+    var(--border) 50%,
+    var(--surface-high) 100%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ─── Focus ring ─────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── Scrollbar (dark) ───────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ─── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
